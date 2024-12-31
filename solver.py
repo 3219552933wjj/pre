@@ -87,34 +87,6 @@ class Solver(object):
 			x = x.cpu()
 		return x.data
 
-	'''
-	在您的代码中，update_lr 函数的目的是更新优化器的学习率。然而，在函数中有一个错误。让我为您解释一下：
-	
-	python
-	Copy code
-	def update_lr(self, g_lr, d_lr):
-		for param_group in self.optimizer.param_groups:
-			param_group['lr'] = lr
-			
-	问题出在这一行：
-	
-	python
-	Copy code
-	param_group['lr'] = lr
-	您尝试将学习率设置为未定义的变量 lr。应该将其更正为：
-	
-	python
-	Copy code
-	param_group['lr'] = g_lr  # or d_lr, depending on which one you want to use
-	这样，您可以选择将学习率更新为 g_lr 或 d_lr，具体取决于您的需求。如果您希望同时更新生成器和判别器的学习率，可以将 update_lr 函数修改为接受一个学习率参数：
-	
-	python
-	Copy code
-	def update_lr(self, lr):
-		for param_group in self.optimizer.param_groups:
-			param_group['lr'] = lr
-	然后，在调用此函数时，传递您希望使用的学习率值。
-	'''
 	def update_lr(self,lr):
 		for param_group in self.optimizer.param_groups:
 			param_group['lr'] = lr
@@ -259,19 +231,6 @@ class Solver(object):
 
 				print('[Validation] Acc: %.4f, SE: %.4f, SP: %.4f, PC: %.4f, F1: %.4f, JS: %.4f, DC: %.4f'%(acc,SE,SP,PC,F1,JS,DC))
 				
-				'''
-				torchvision.utils.save_image(images.data.cpu(),
-											os.path.join(self.result_path,
-														'%s_valid_%d_image.png'%(self.model_type,epoch+1)))
-				torchvision.utils.save_image(SR.data.cpu(),
-											os.path.join(self.result_path,
-														'%s_valid_%d_SR.png'%(self.model_type,epoch+1)))
-				torchvision.utils.save_image(GT.data.cpu(),
-											os.path.join(self.result_path,
-														'%s_valid_%d_GT.png'%(self.model_type,epoch+1)))
-				'''
-
-
 				# Save Best U-Net model
 				if unet_score > best_unet_score:
 					best_unet_score = unet_score
